@@ -51,6 +51,15 @@ class Enemy extends FlxSprite //generic class for enemy
 		hp -= str;
 		if (hp <= 0){
 			kill();
+			makePickup();
+		}
+	}
+	
+	function makePickup(){
+		var lucky:Float = Math.random() * 1;
+		if (lucky > 0.1){
+			var n:Heart = new Heart(x, y);
+			PlayState.pickups.add(n);
 		}
 	}
 	

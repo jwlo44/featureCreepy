@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 class Crepe extends FlxSprite
 {
 	var speed:Int = 70;
-	var hp:Int = 10;
+	public var hp:Int = 10;
 	var hpMax:Int = 60 * 10;
 	var survMax:Int = 60 * 30;
 	var attackRate:Int = 30;
@@ -153,15 +153,24 @@ class Crepe extends FlxSprite
 		if (hp <= 0){
 			kill();
 		}
-		FlxG.overlap(this, PlayState.noms, nomhandler);
+		FlxG.overlap(this, PlayState.pickups, pickuphandler);
 		if (surv > survMax){
 			surv = survMax;
 		}
 	}
 	
-	function nomhandler(p:Crepe, n:Nom){
-		surv += n.nomval;
+	function pickuphandler(p:Crepe, n:Pickup){
+		switch(n.name){
+			case "nom": 
+				surv += cast(n,Nom).nomval;
+			case "heart":
+				hp += 60 * 2;
+				if (hp > hpMax){
+					hp = hpMax;
+				}
+		}
 		n.kill();
+		
 	}
 	
 	function animPick(){

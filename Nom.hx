@@ -16,7 +16,7 @@ class Nom extends Pickup
 		super(X, Y);
 		name = "nom";
 		loadGraphic(AssetPaths.nom__png);
-		PlayState.noms.add(this);
+		PlayState.pickups.add(this);
 	}
 	
 	override function kill(){

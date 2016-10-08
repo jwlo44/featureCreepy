@@ -25,7 +25,7 @@ class Utils
 		return Math.sqrt( XX * XX + YY * YY );
 	}
 	
-	public static function explode(x:Float = 0, y:Float = 0, count:Int = 10, color:Int = FlxColor.WHITE, scroll:Bool) //makes an explosion, defaults to white pixels
+	public static function explode(x:Float = 0, y:Float = 0, count:Int = 10, color:Int = FlxColor.WHITE, scroll:Bool = false) //makes an explosion, defaults to white pixels
 	{
 		var e:FlxEmitter = new FlxEmitter(x, y);
 		for (i in 0...count){

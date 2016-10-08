@@ -19,9 +19,10 @@ class PlayState extends FlxState
 	public static var crepeStuff:FlxTypedGroup<FlxSprite>;
 	public static var hud:FlxTypedGroup<FlxSprite>;
 	public static var misc:FlxTypedGroup<FlxSprite>;
-	public static var noms:FlxTypedGroup<Pickup>;
+	public static var pickups:FlxTypedGroup<Pickup>;
 	public static var enemies:FlxTypedGroup<Enemy>;
 	public static var emitters:FlxTypedGroup<FlxEmitter>;
+	public static var bullets:FlxTypedGroup<Bullet>;
 	
 	public static var lvl:FlxTilemap;
 	public static var walls:FlxTilemap;
@@ -35,9 +36,10 @@ class PlayState extends FlxState
 		crepeStuff = new FlxTypedGroup<FlxSprite>();
 		hud = new FlxTypedGroup<FlxSprite>();
 		misc = new FlxTypedGroup<FlxSprite>();
-		noms = new FlxTypedGroup<Nom>();
+		pickups = new FlxTypedGroup<Pickup>();
 		enemies = new FlxTypedGroup<Enemy>();
 		emitters = new FlxTypedGroup<FlxEmitter>();
+		bullets = new FlxTypedGroup<Bullet>();
 		
 		var n:Nom = new Nom(128, 60);
 		
@@ -57,8 +59,9 @@ class PlayState extends FlxState
 		add(misc);
 		add(crepeStuff);
 		add(enemies);
-		add(noms);
+		add(pickups);
 		add(emitters);
+		add(bullets);
 		add(hud);
 		
 		add(new HUD());
@@ -77,7 +80,7 @@ class PlayState extends FlxState
 	public static function addNom(c:Int){
 		for (i in 0...c){
 			var n:Nom = new Nom(Math.round(Math.random() * 16) * 16, Math.round(Math.random() * 9) * 16);
-			noms.add(n);
+			pickups.add(n);
 			var tx:Int = Math.round((n.x) / 16);
 			var ty:Int = Math.round((n.y) / 16);
 			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
@@ -96,7 +99,7 @@ class PlayState extends FlxState
 			case "player":
 				crepe = new Crepe(x, y);
 			case "mushroom":
-				var m:Mushroom = new Mushroom(x, y);
+				var m:Gun = new Gun(x, y);
 		}
 	}
 }
