@@ -48,6 +48,11 @@ class Ctrl
 		altcontrol();
 	}
 	
+	public static function anyKey():Bool
+	{
+	return attack || special || jattack || jspecial || rattack || rspecial || up || down || left || right || pause || map;
+	}
+	
 	public static function altcontrol() {
 		var gp:FlxGamepad = FlxG.gamepads.lastActive;
 		if (gp == null) {
