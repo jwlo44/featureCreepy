@@ -25,7 +25,7 @@ class Utils
 		return Math.sqrt( XX * XX + YY * YY );
 	}
 	
-	public static function explode(x:Float = 0, y:Float = 0, count:Int = 10, color:Int = FlxColor.WHITE) //makes an explosion, defaults to white pixels
+	public static function explode(x:Float = 0, y:Float = 0, count:Int = 10, color:Int = FlxColor.WHITE, scroll:Bool) //makes an explosion, defaults to white pixels
 	{
 		var e:FlxEmitter = new FlxEmitter(x, y);
 		for (i in 0...count){
@@ -35,6 +35,10 @@ class Utils
 			p.velocity.x = p.velocity.x * 3;
 			p.velocity.y = p.velocity.y * 3;
 			p.elasticity = 0.3;
+			
+			if (scroll){
+				p.scrollFactor.set(0, 0);
+			}
 			
 			e.add(p);
 		}
@@ -46,4 +50,5 @@ class Utils
 		e.speed.set( -200, -200, 200, 200);
 		e.start();
 	}
+
 }
