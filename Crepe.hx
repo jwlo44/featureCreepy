@@ -45,6 +45,11 @@ class Crepe extends FlxSprite
 		animation.add("iup", [3], fps);
 		animation.add("iright", [6], fps);
 		animation.add("ileft", [9], fps);
+		//hit
+		animation.add("hdown", [15], fps);
+		animation.add("hup", [16], fps);
+		animation.add("hright", [17], fps);
+		animation.add("hleft", [18], fps);
 		
 		animation.play("idown");
 		
@@ -205,7 +210,7 @@ class Crepe extends FlxSprite
 			return;
 		}
 		stun = stunSet;
-		animation.play("hit");
+		animation.play("h"+animation.name.substr(1));
 		var kb:Float = speed;
 		if (getMidpoint().x < e.getMidpoint().x){
 			velocity.x = -kb;

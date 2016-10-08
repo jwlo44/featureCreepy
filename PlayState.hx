@@ -19,7 +19,7 @@ class PlayState extends FlxState
 	public static var crepeStuff:FlxTypedGroup<FlxSprite>;
 	public static var hud:FlxTypedGroup<FlxSprite>;
 	public static var misc:FlxTypedGroup<FlxSprite>;
-	public static var noms:FlxTypedGroup<Nom>;
+	public static var noms:FlxTypedGroup<Pickup>;
 	public static var enemies:FlxTypedGroup<Enemy>;
 	public static var emitters:FlxTypedGroup<FlxEmitter>;
 	
@@ -41,7 +41,6 @@ class PlayState extends FlxState
 		
 		var n:Nom = new Nom(128, 60);
 		
-		FlxG.camera.follow(crepe, FlxCameraFollowStyle.TOPDOWN_TIGHT);
 		
 		var load:FlxOgmoLoader = new FlxOgmoLoader("assets/data/" + lvlname + ".oel");
 		lvl = load.loadTilemap(AssetPaths.tiles__png, 16, 16, "tiles");
@@ -49,6 +48,7 @@ class PlayState extends FlxState
 		load.loadEntities(placeEntities, "entities");
 		walls.visible = false;
 		
+		FlxG.camera.follow(crepe, FlxCameraFollowStyle.TOPDOWN_TIGHT);
 		FlxG.worldBounds.set(0, 0, lvl.width, lvl.height); //set world bounds to the size of the level so collisions work
 		FlxG.camera.setScrollBounds(0, lvl.width, 0, lvl.height);
 		
@@ -78,6 +78,13 @@ class PlayState extends FlxState
 		for (i in 0...c){
 			var n:Nom = new Nom(Math.round(Math.random() * 16) * 16, Math.round(Math.random() * 9) * 16);
 			noms.add(n);
+			var tx:Int = Math.round((n.x) / 16);
+			var ty:Int = Math.round((n.y) / 16);
+			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
+				trace("s");
+				addNom(1);
+				n.destroy();
+			}
 		}
 	}
 	
