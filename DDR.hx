@@ -20,7 +20,7 @@ class DDR extends FlxSprite
 	var textTime:Float = 0;
 	var textTimeMax:Float = 1;
 	var arrowIdx:Int = 0;
-	var goodRange:Int = 2;
+	var goodRange:Int = 5;
 	var arrows:FlxTypedGroup<FlxSprite>;
 	var textSpr:FlxSprite;
 	// list of arrows
@@ -116,17 +116,20 @@ class DDR extends FlxSprite
 				{
 					arrow.kill();
 					arrows.remove(arrow);
-					Utils.explode(arrow.x, arrow.y, 8, FlxColor.CYAN);
+					Utils.explode(arrow.x, arrow.y, 8, FlxColor.CYAN, false);
 					// display awesome text
 					showText(false);
 				}
 			}
-			else if (arrow.y < -3)
+			else if (arrow.y < HUD.arrowY - goodRange)
 			{
 				arrow.kill();
 				arrows.remove(arrow);
+				Utils.explode(textSpr.x, textSpr.y, 8, FlxColor.RED, false);
 				// display bad text
 				showText(true);
+				// punch the crepe
+				PlayState.crepe.loseHealth(60);
 			}
 		}
 	}

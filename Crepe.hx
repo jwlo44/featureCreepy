@@ -233,8 +233,13 @@ class Crepe extends FlxSprite
 		if (getMidpoint().y > e.getMidpoint().y){
 			velocity.y = kb;
 		}
+		loseHealth(e.str);
+	}
+	
+	public function loseHealth(damage:Int):Void
+	{
 		Utils.explode(getMidpoint().x, getMidpoint().y, 10, FlxColor.RED);
-		hp -= e.str;
+		hp -= damage;
 		if (hp <= 0){
 			kill();
 		}
