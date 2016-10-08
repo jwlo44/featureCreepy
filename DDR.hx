@@ -4,6 +4,9 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -11,11 +14,15 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
  */
 class DDR extends FlxSprite 
 {
-	var speed:Int = -25;
+	var speed:Int = -36;
 	var timer:Float = 0;
-	var timerMax:Float = 10;
+	var timerMax:Float = 2;
+	var textTime:Float = 0;
+	var textTimeMax:Float = 1;
 	var arrowIdx:Int = 0;
+	var goodRange:Int = 2;
 	var arrows:FlxTypedGroup<FlxSprite>;
+	var textSpr:FlxSprite;
 	// list of arrows
 	// make one in new row
 	// update y pos
@@ -25,6 +32,10 @@ class DDR extends FlxSprite
 		super(X, Y);
 		visible = false;
 	    arrows = new FlxTypedGroup<FlxSprite>();
+		textSpr = new FlxSprite();
+		textSpr.x = HUD.arrowX + 16;
+		textSpr.y = HUD.arrowY + 16;
+		PlayState.hud.add(textSpr);
 	}
 	override public function update(elapsed:Float):Void 
 	{
@@ -34,6 +45,16 @@ class DDR extends FlxSprite
 			makeArrow();
 			timer = timerMax;
 		}
+		
+		if (textTime > 0)
+		{
+			textTime -= elapsed;
+		}
+		else
+		{
+			textSpr.visible = false;
+		}
+		
 		// check arrows
 		checkArrows();
 	    super.update(elapsed);
@@ -50,6 +71,7 @@ class DDR extends FlxSprite
 		arrows.add(arrow);
 		
 		PlayState.hud.add(arrow);
+		
 		trace("made arrow at " + arrow.x + ", " + arrow.y);
 		arrowIdx = (arrowIdx + 1) % 4;
 	}
@@ -59,11 +81,12 @@ class DDR extends FlxSprite
 		for (arrow in arrows)
 		{
 			// if we're in range for awesomeness...
-			if (arrow.y <= 3 && arrow.y >= -3)
+			if (arrow.y <= HUD.arrowY + goodRange && arrow.y >= HUD.arrowY - goodRange)
 			{
 				trace("arrow in range");
 				// 0 up,1 left, 2 down, 3 right
-				var arrowDir:Int = Math.floor((arrow.x - 132) / 16);
+				var arrowDir:Int = Math.floor((arrow.x - HUD.arrowX) / 16);
+				trace("arrowDir " + arrowDir);
 				var awesomeness:Bool = false;
 				// and we're also hitting the right button...
 				switch( arrowDir)
@@ -91,19 +114,36 @@ class DDR extends FlxSprite
 				}
 				if (awesomeness)
 				{
-					trace("yay!");
 					arrow.kill();
+					arrows.remove(arrow);
+					Utils.explode(arrow.x, arrow.y, 8, FlxColor.CYAN);
 					// display awesome text
+					showText(false);
 				}
 			}
 			else if (arrow.y < -3)
 			{
 				arrow.kill();
 				arrows.remove(arrow);
-				trace("booo!");
 				// display bad text
+				showText(true);
 			}
 		}
+	}
+	
+	private function showText(isBad:Bool)
+	{
+		if (isBad)
+		{
+			textSpr.loadGraphic(AssetPaths.booText__png); 
+			
+		}
+		else
+		{
+			textSpr.loadGraphic(AssetPaths.ExcellentDDRText__png);
+		}	
+		textTime = textTimeMax;
+		textSpr.visible = true;
 	}
 	
 }
