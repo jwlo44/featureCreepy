@@ -14,9 +14,10 @@ class CreditsState extends FlxState
 	var trashImg:FlxSprite;
 	override public function create():Void
 	{
+		FlxG.mouse.visible = false;
 		prettyImage = new FlxSprite();
 		prettyImage.loadGraphic(AssetPaths.creditsAnimation__png, true, 256, 144);
-		prettyImage.animation.add("credits", [0, 0, 1, 1, 2, 2, 3, 3], 1, true);
+		prettyImage.animation.add("credits", [0, 0, 1, 1, 2, 2, 3, 3, 3], 1, false);
 		prettyImage.animation.play("credits");
 		add(prettyImage);
 		
@@ -37,7 +38,7 @@ class CreditsState extends FlxState
 		{
 			wait--;
 		}
-		else if (Ctrl.anyJustPressed)
+		else if (Ctrl.anyJustPressed||prettyImage.animation.finished)
 		{
 			// go to menu state
 			FlxG.switchState(new MenuState());
