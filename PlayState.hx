@@ -29,7 +29,7 @@ class PlayState extends FlxState
 	public static var lvl:FlxTilemap;
 	public static var walls:FlxTilemap;
 	
-	var russ:FlxSprite;
+	static var russ:FlxSprite;
 	
 	var lvlname:String = "test";
 	
@@ -106,6 +106,12 @@ class PlayState extends FlxState
 		{FlxG.collide(crepe, russ);}
 
 		upgrade();
+		checkWalrus();
+		super.update(elapsed);
+	}
+	
+	private static function checkWalrus()
+	{
 		if (WALRUS && Date.now().getHours() <= 12 && !walrusTime)
 		{
 			russ = new FlxSprite(160, 160);
@@ -121,7 +127,6 @@ class PlayState extends FlxState
 			walrusTime = false;
 			russ.kill();
 		}
-		super.update(elapsed);
 	}
 	
 	public static function addNom(c:Int=1){
