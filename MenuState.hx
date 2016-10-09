@@ -45,7 +45,7 @@ class MenuState extends FlxState
 		else if (Ctrl.anyJustPressed)
 		{
 		// go to play state
-		FlxG.switchState(new PlayState());
+		FlxG.switchState(new ControlState());
 		}
 		super.update(elapsed);
 	}
