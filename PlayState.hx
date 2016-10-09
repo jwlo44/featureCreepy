@@ -39,7 +39,7 @@ class PlayState extends FlxState
 	public static var SURVIVE:Bool = true;
 	public static var SWORD:Bool = true;
 	public static var BULLETS:Bool = true;
-	public static var STATS:Bool = false;
+	public static var STATS:Bool = true;
 	public static var WALRUS:Bool = false;
 	public static var DANCE:Bool = false;
 	
@@ -91,7 +91,7 @@ class PlayState extends FlxState
 		addNom(10);
 		
 		add(new HUD());
-		
+		HUD.show("stats");
 		super.create();
 	}
 
