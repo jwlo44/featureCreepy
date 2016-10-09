@@ -37,22 +37,13 @@ class PlayState extends FlxState
 	
 	public var feature:FlxSprite;
 	
-<<<<<<< HEAD
 	public static var MOVE:Bool = false;
 	public static var SURVIVE:Bool = false;
 	public static var SWORD:Bool = false;
 	public static var BULLETS:Bool = false;
 	public static var STATS:Bool = false;
 	public static var WALRUS:Bool = false;
-=======
-	public static var MOVE:Bool = true;
-	public static var SURVIVE:Bool = true;
-	public static var SWORD:Bool = true;
-	public static var BULLETS:Bool = true;
-	public static var STATS:Bool = true;
-	public static var WALRUS:Bool = true;
 	public static var walrusTime = false;
->>>>>>> 6d61efd34d28e167cdd7f84832bfb1433d2553f3
 	public static var DANCE:Bool = false;
 	
 	override public function create():Void
@@ -117,11 +108,8 @@ class PlayState extends FlxState
 		{FlxG.collide(crepe, russ);}
 
 		upgrade();
-<<<<<<< HEAD
 		dlg();
-=======
 		checkWalrus();
->>>>>>> 6d61efd34d28e167cdd7f84832bfb1433d2553f3
 		super.update(elapsed);
 	}
 	
