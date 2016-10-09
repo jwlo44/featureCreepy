@@ -13,7 +13,7 @@ class Crepe extends FlxSprite
 	var speed:Int = 70;
 	public var hp:Int = 10;
 	var hpMax:Int = 60 * 10;
-	var survMax:Int = 60 * 30;
+	var survMax:Int = 60 * 45;
 	var attackRate:Int = 30;
 	var str:Int = 1;
 	var stunSet:Int = 40;

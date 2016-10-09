@@ -10,7 +10,7 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 class Nom extends Pickup
 {
 
-	public var nomval:Int = 60 * 10;
+	public var nomval:Int = 60 * 12;
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
 		super(X, Y);

@@ -156,7 +156,7 @@ class PlayState extends FlxState
 				ncount++;
 			}
 		}
-		if (ncount > 5){
+		if (ncount > 7){
 			return;
 		}
 		var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
@@ -252,7 +252,6 @@ class PlayState extends FlxState
 				HUD.show("dance");
 				DANCE = true;
 		}
-		//var g:Glitch = new Glitch();
 	}
 	
 	public static function addEnemy(name:String, ov:Int=0){
@@ -323,6 +322,8 @@ class PlayState extends FlxState
 				case 36: t = "Uh, we need an ending though.";
 				case 37: t = "Nahhhhhhh let's just wait until they die";
 				case 38: t = "Works for me.";
+				case 39: t = "Honestly, though...";
+				case 40: t = "Dave, this sucks.";
 			}
 			if (t == "glitch"){
 				dtick = 1;
