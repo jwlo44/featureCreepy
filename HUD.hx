@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.addons.text.FlxTextField;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.debug.stats.Stats;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -25,6 +26,7 @@ class HUD extends FlxSprite
 	public static var arrowX:Int = 0;
 	public static var arrowY:Int = 16;
 	static var ddr:DDR;
+	static var stats:RpgStats;
 	
 	static var arrows:FlxTypedGroup<FlxSprite>;
 	
@@ -144,6 +146,9 @@ class HUD extends FlxSprite
 					PlayState.hud.add(a);
 				}
 				ddr = new DDR();
+			case "stats":
+				stats = new RpgStats();
+				
 		}
 	}
 	
