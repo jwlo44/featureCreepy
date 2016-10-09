@@ -57,9 +57,6 @@ class PlayState extends FlxState
 		emitters = new FlxTypedGroup<FlxEmitter>();
 		bullets = new FlxTypedGroup<Bullet>();
 		
-		var n:Nom = new Nom(128, 60);
-		
-		
 		var load:FlxOgmoLoader = new FlxOgmoLoader("assets/data/" + lvlname + ".oel");
 		lvl = load.loadTilemap(AssetPaths.tiles__png, 16, 16, "tiles");
 		walls = load.loadTilemap(AssetPaths.walls__png, 8, 8, "walls");
@@ -77,6 +74,8 @@ class PlayState extends FlxState
 		feature.scale.set(0.4, 0.4);
 		feature.visible = false;
 		
+		addNom(3);
+		
 		add(lvl);
 		add(walls);
 		add(misc);
@@ -87,8 +86,6 @@ class PlayState extends FlxState
 		add(bullets);
 		add(hud);
 		add(feature);
-		
-		addNom(10);
 		
 		add(new HUD());
 		HUD.show("stats");
@@ -106,14 +103,15 @@ class PlayState extends FlxState
 	
 	public static function addNom(c:Int){
 		for (i in 0...c){
+			trace("new nom");
 			var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
 			pickups.add(n);
 			var tx:Int = Math.round((n.x) / 8);
 			var ty:Int = Math.round((n.y) / 8);
 			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
-				trace("destroy");
+				trace("nom kill");
 				addNom(1);
-				n.destroy();
+				n.kill();
 			}
 		}
 	}
@@ -186,7 +184,7 @@ class PlayState extends FlxState
 	}
 	
 	public static function addEnemy(name:String){
-		var n:Enemy = new Enemy();
+		var n:Enemy = new Enemy(0,0);
 		var x:Float = Math.round(Math.random() * (lvl.width/16)) * 16;
 		var y:Float = Math.round(Math.random() * (lvl.height/16)) * 16;
 		switch(name){
@@ -196,8 +194,8 @@ class PlayState extends FlxState
 		var tx:Int = Math.round((n.x) / 8);
 		var ty:Int = Math.round((n.y) / 8);
 		if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
-			addNom(1);
-			n.destroy();
+			addEnemy(name);
+			n.kill();
 		}
 	}
 }

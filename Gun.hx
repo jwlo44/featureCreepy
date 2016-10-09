@@ -57,9 +57,9 @@ class Gun extends Enemy
 			if (animation.finished){
 				animation.play("shoot");
 				if(facing == FlxObject.RIGHT){
-					var b:Bullet = new Bullet(x+width, y, target);
+					var b:Bullet = new Bullet(x+width, y, 2, target);
 				}else{
-					var b:Bullet = new Bullet(x, y, target);
+					var b:Bullet = new Bullet(x, y, 2, target);
 				}
 			}
 		}else{

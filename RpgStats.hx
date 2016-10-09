@@ -1,7 +1,12 @@
 package;
 
+<<<<<<< HEAD
 import flixel.FlxG;
 import flixel.FlxSprite;
+=======
+import flixel.FlxSprite;
+import flixel.addons.display.FlxSliceSprite;
+>>>>>>> 41c43c69064b668c3877de5399c1e7a3d5193864
 import flixel.math.FlxRect;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.text.FlxText;
@@ -12,6 +17,7 @@ import flixel.text.FlxText;
  */
 class RpgStats extends FlxSprite 
 {
+<<<<<<< HEAD
 	private var squanch:Float;
 	private var walrus:Bool = false;
 	private var strengrth:Int = 1;
@@ -48,6 +54,14 @@ class RpgStats extends FlxSprite
 		+ "\nWalrus: " + walrus
 		+ "\nZ: " + Z
 		+ "\nscore: " + score++;
+=======
+
+	public function new(?X:Float=0, ?Y:Float=0) 
+	{
+		visible = false;
+		super(x, y);
+		
+>>>>>>> 41c43c69064b668c3877de5399c1e7a3d5193864
 	}
 	
 }

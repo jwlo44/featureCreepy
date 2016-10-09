@@ -1,4 +1,5 @@
 package;
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 /**
@@ -28,6 +29,14 @@ class Enemy extends FlxSprite //generic class for enemy
 	{
 		super(X, Y);
 		PlayState.enemies.add(this);
+		makeGraphic(1, 1);
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		target = PlayState.crepe;
+		FlxG.overlap(this, PlayState.bullets, damageB);
+		super.update(elapsed);
 	}
 	
 	public function damage(str:Int){
@@ -58,10 +67,43 @@ class Enemy extends FlxSprite //generic class for enemy
 		}
 	}
 	
+	public function damageB(c:Enemy, b:Bullet){
+		if (b.team==2){
+			return;
+		}
+		stun = stunSet;
+		animation.play("hit");
+		var kb:Float = speed;
+		if (getMidpoint().x < b.getMidpoint().x){
+			velocity.x = -kb;
+		}
+		if (getMidpoint().x > b.getMidpoint().x){
+			velocity.x = kb;
+		}
+		if (getMidpoint().y < b.getMidpoint().y){
+			velocity.y = -kb;
+		}
+		if (getMidpoint().y > b.getMidpoint().y){
+			velocity.y = kb;
+		}
+		Utils.explode(getMidpoint().x, getMidpoint().y);
+		hp -= 2;
+		b.kill();
+		if (hp <= 0){
+			kill();
+			PlayState.addEnemy(name);
+			makePickup();
+		}
+	}
+	
 	function makePickup(){
 		var lucky:Float = Math.random() * 1;
-		if (lucky > 0.1){
+		if (lucky > 0.2 && lucky<0.6){
 			var n:Heart = new Heart(x, y);
+			PlayState.pickups.add(n);
+		}
+		if (lucky > 0.6 && lucky<1 && PlayState.BULLETS){
+			var n:Ammo = new Ammo(x, y);
 			PlayState.pickups.add(n);
 		}
 	}

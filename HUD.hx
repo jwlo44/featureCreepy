@@ -22,6 +22,8 @@ class HUD extends FlxSprite
 	static var surv:FlxSprite;
 	static var bottom:FlxSprite;
 	static var bText:FlxText;
+	static var ammo:FlxSprite;
+	static var aText:FlxText;
 	
 	public static var arrowX:Int = 0;
 	public static var arrowY:Int = 16;
@@ -37,7 +39,7 @@ class HUD extends FlxSprite
 		visible = false;
 		
 		block = new FlxSprite();
-		block.makeGraphic(FlxG.width, 16, FlxColor.BLACK);
+		block.makeGraphic(FlxG.width, 12, FlxColor.BLACK);
 		block.scrollFactor.set(0, 0);
 		
 		hpEmpty = new FlxSprite(2, 2);
@@ -68,7 +70,13 @@ class HUD extends FlxSprite
 		bText.scrollFactor.set(0, 0);
 		bText.visible = false;
 		
+		ammo = new FlxSprite(survEmpty.width*2 + 6, 3);
+		ammo.loadGraphic(AssetPaths.ammocount__png);
+		ammo.scrollFactor.set(0, 0);
 		
+		aText = new FlxText(ammo.x + ammo.width + 2, -1);
+		aText.text = "x5";
+		aText.scrollFactor.set(0, 0);
 		
 		PlayState.hud.add(block);
 		PlayState.hud.add(hp);
@@ -77,6 +85,8 @@ class HUD extends FlxSprite
 		PlayState.hud.add(survEmpty);
 		PlayState.hud.add(bottom);
 		PlayState.hud.add(bText);
+		PlayState.hud.add(ammo);
+		PlayState.hud.add(aText);
 		
 		
 	}
@@ -99,6 +109,10 @@ class HUD extends FlxSprite
 		}else{
 			surv.visible = false;
 		}
+	}
+	
+	public static function ammoSet(set:Int){
+		aText.text = "x" + set;
 	}
 	
 	static var bTick:Int = 0;
