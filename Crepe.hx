@@ -17,6 +17,7 @@ class Crepe extends FlxSprite
 	var attackRate:Int = 30;
 	var str:Int = 1;
 	var stunSet:Int = 40;
+	var bSpeed:Int = 200;
 	
 	var surv:Int = 0;
 	var attacking:Bool = false;
@@ -24,6 +25,9 @@ class Crepe extends FlxSprite
 	var stun:Int = 0;
 	
 	var knife:FlxSprite;
+	var gun:FlxSprite;
+	
+	var ammo:Int = 5;
 	
 	public function new(?X:Float = 0, ?Y:Float = 0) 
 	{
@@ -58,7 +62,10 @@ class Crepe extends FlxSprite
 		
 		knife = new FlxSprite();
 		knife.loadGraphic(AssetPaths.Knife__png);
-		knife.antialiasing = false;
+		
+		gun = new FlxSprite();
+		gun.loadGraphic(AssetPaths.Knife__png);
+		
 		PlayState.crepeStuff.add(this);
 		PlayState.crepeStuff.add(knife);
 	}
@@ -88,7 +95,7 @@ class Crepe extends FlxSprite
 		HUD.hpSet(hp/hpMax);
 		super.update(elapsed);
 	}
-	
+		
 	function attack(){
 		if (!PlayState.SWORD){
 			return;
@@ -115,6 +122,8 @@ class Crepe extends FlxSprite
 			attacking = true;
 		}
 		if (attackTime <= 10 && attacking){
+			knife.x = -90;
+			knife.y = -90;
 			attacking = false;
 			knife.visible = false;
 			switch(animation.name.substr(1)){
@@ -131,33 +140,39 @@ class Crepe extends FlxSprite
 	}
 	
 	function fireGun(){
-		if (!PlayState.SWORD){
+		if (!PlayState.BULLETS){
 			return;
 		}
 		attackTime--;
-		if (Ctrl.attack && attackTime <= 0){
-			trace("attack");
-			knife.visible = true;
+		if (Ctrl.special && attackTime <= 0 && ammo > 0){
+			ammo--;
+			gun.visible = true;
 			velocity.x = velocity.y = 0;
 			attackTime = attackRate;
-			PlayState.crepeStuff.remove(this); PlayState.crepeStuff.remove(knife);
+			PlayState.crepeStuff.remove(this); PlayState.crepeStuff.remove(gun);
 			switch(animation.name.substr(1)){
-				case "up": knife.x = x + 10; knife.y = y - 6; animate("aup"); knife.angle = 0;
-				PlayState.crepeStuff.add(knife); PlayState.crepeStuff.add(this);
-				case "down": knife.x = x + 9; knife.y = y + 15; animate("adown"); knife.angle = 180;
-				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
-				case "left": knife.x = x - 8; knife.y = y + 6; animate("aleft"); knife.angle = 270;
-				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
-				case "right": knife.x = x + 20; knife.y = y + 7; animate("aright"); knife.angle = 90;
-				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
+				case "up": gun.x = x + 10; gun.y = y - 6; animate("aup"); gun.angle = 0;
+				PlayState.crepeStuff.add(gun); PlayState.crepeStuff.add(this);
+				var b:Bullet = new Bullet(gun.x, gun.y, 1, null, 0, -bSpeed);
+				case "down": gun.x = x + 9; gun.y = y + 15; animate("adown"); gun.angle = 180;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(gun);
+				var b:Bullet = new Bullet(gun.x, gun.y, 1, null, 0, bSpeed);
+				case "left": gun.x = x - 8; gun.y = y + 6; animate("aleft"); gun.angle = 270;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(gun);
+				var b:Bullet = new Bullet(gun.x, gun.y, 1, null, -bSpeed, 0);
+				case "right": gun.x = x + 20; gun.y = y + 7; animate("aright"); gun.angle = 90;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(gun);
+				var b:Bullet = new Bullet(gun.x, gun.y, 1, null, bSpeed, 0);
 			}
 		}
 		if (attackTime > 10){
 			attacking = true;
 		}
 		if (attackTime <= 10 && attacking){
+			gun.x = -90;
+			gun.y = -90;
 			attacking = false;
-			knife.visible = false;
+			gun.visible = false;
 			switch(animation.name.substr(1)){
 				case "up": animate("iup");
 				case "down": animate("idown");
@@ -166,9 +181,9 @@ class Crepe extends FlxSprite
 			}
 		}
 		if (attacking){
-			FlxG.overlap(knife, PlayState.enemies, damageEnemy);
 			FlxG.overlap(this, PlayState.enemies, damageEnemy);
 		}
+		HUD.ammoSet(ammo);
 	}
 	
 	function move(){
@@ -220,6 +235,8 @@ class Crepe extends FlxSprite
 				if (hp > hpMax){
 					hp = hpMax;
 				}
+			case "ammo":
+				ammo += 2;
 		}
 		n.kill();
 		
@@ -289,7 +306,7 @@ class Crepe extends FlxSprite
 	}
 	
 	function bulletDamage(p:FlxSprite, e:Bullet){
-		if (stun > 0){
+		if (stun > 0||e.team==1){
 			return;
 		}
 		stun = Math.round(stunSet*.5);

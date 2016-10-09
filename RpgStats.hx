@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.addons.display.FlxSliceSprite;
 import flixel.math.FlxRect;
 import flixel.system.FlxAssets.FlxGraphicAsset;
@@ -8,13 +9,13 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
  * ...
  * @author ...
  */
-class RpgStats extends FlxSliceSprite 
+class RpgStats extends FlxSprite 
 {
 
-	public function new(Graphic:FlxGraphicAsset, SliceRect:FlxRect, Width:Float, Height:Float) 
+	public function new(?X:Float=0, ?Y:Float=0) 
 	{
 		visible = false;
-		super(Graphic, SliceRect, Width, Height);
+		super(x, y);
 		
 	}
 	
