@@ -23,29 +23,40 @@ class Enemy extends FlxSprite //generic class for enemy
 	var target:FlxSprite;
 	var stun:Int = 0;
 	
-	var name:String = "enemy";
+	public var name:String = "enemy";
 
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
 		super(X, Y);
 		PlayState.enemies.add(this);
-		makeGraphic(1, 1);
+		try{
+			makeGraphic(1, 1);
+		}catch (msg:String){
+			
+		}
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
 		target = PlayState.crepe;
-		FlxG.overlap(this, PlayState.bullets, damageB);
 		super.update(elapsed);
+		FlxG.overlap(this, PlayState.bullets, damageB);
+		if (hp <= 0){
+			kill();
+			PlayState.addEnemy(name);
+			makePickup();
+		}
 	}
 	
 	public function damage(str:Int){
-		if (stun > 0){
+		if (stun > 0||hp<=0){
 			return;
 		}
 		stun = stunSet;
 		animation.play("hit");
 		var kb:Float = speed;
+		trace("hp" + hp);
+		target = PlayState.crepe;
 		if (getMidpoint().x < target.getMidpoint().x){
 			velocity.x = -kb;
 		}
@@ -60,15 +71,10 @@ class Enemy extends FlxSprite //generic class for enemy
 		}
 		Utils.explode(getMidpoint().x, getMidpoint().y);
 		hp -= str;
-		if (hp <= 0){
-			kill();
-			PlayState.addEnemy(name);
-			makePickup();
-		}
 	}
 	
 	public function damageB(c:Enemy, b:Bullet){
-		if (b.team==2){
+		if (b.team==2||hp<=0){
 			return;
 		}
 		stun = stunSet;
@@ -89,11 +95,6 @@ class Enemy extends FlxSprite //generic class for enemy
 		Utils.explode(getMidpoint().x, getMidpoint().y);
 		hp -= 2;
 		b.kill();
-		if (hp <= 0){
-			kill();
-			PlayState.addEnemy(name);
-			makePickup();
-		}
 	}
 	
 	function makePickup(){
@@ -106,6 +107,12 @@ class Enemy extends FlxSprite //generic class for enemy
 			var n:Ammo = new Ammo(x, y);
 			PlayState.pickups.add(n);
 		}
+	}
+	
+	override public function kill():Void 
+	{
+		PlayState.enemies.remove(this, true);
+		super.kill();
 	}
 	
 }
