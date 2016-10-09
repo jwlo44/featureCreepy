@@ -31,7 +31,7 @@ class PlayState extends FlxState
 	
 	static var russ:FlxSprite;
 	
-	var lvlname:String = "test";
+	var lvlname:String = "level";
 	
 	public static var ustate:String = "";
 	
