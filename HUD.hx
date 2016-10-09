@@ -129,6 +129,9 @@ class HUD extends FlxSprite
 		if(PlayState.DANCE && ddr!=null){
 			ddr.update(elapsed);
 		}
+		if(PlayState.STATS && stats!=null){
+			stats.update(elapsed);
+		}
 		bTick--;
 		if (bTick < 0){
 			bText.visible = false;
@@ -161,8 +164,7 @@ class HUD extends FlxSprite
 				}
 				ddr = new DDR();
 			case "stats":
-				stats = new RpgStats();
-				
+				stats = new RpgStats();	
 		}
 	}
 	
