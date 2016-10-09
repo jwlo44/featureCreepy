@@ -89,8 +89,6 @@ class HUD extends FlxSprite
 		PlayState.hud.add(bText);
 		PlayState.hud.add(ammo);
 		PlayState.hud.add(aText);
-		
-		
 	}
 	
 	public static function hpSet(set:Float){

@@ -211,7 +211,9 @@ class PlayState extends FlxState
 				if (feature.animation.finished){
 					ustate = "utext";
 					feature.visible = false;
-					camera.flash();
+					if(Main.flash){
+						camera.flash();
+					}
 				}
 			case "utext":
 				newFeature();

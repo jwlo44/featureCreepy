@@ -15,8 +15,13 @@ class SoundPlayer
 	public static function music(name:String) {
 		if (mute) {
 			return;
-		} 
-		FlxG.sound.playMusic("assets/music/"+name+".mp3", 1, true);
+		}
+		
+		if(Main.flash){
+			FlxG.sound.playMusic("assets/music/" + name + ".mp3", 1, true);
+		}else{
+			FlxG.sound.playMusic("assets/music/" + name + ".ogg", 1, true);
+		}
 	}
 	
 	public static function stopMusic() {
