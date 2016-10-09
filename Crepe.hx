@@ -25,6 +25,9 @@ class Crepe extends FlxSprite
 	
 	var knife:FlxSprite;
 	
+	public var SURVIVE:Bool = false;
+	public var SWORD:Bool = false;
+	
 	public function new(?X:Float = 0, ?Y:Float = 0) 
 	{
 		super(X, Y);
@@ -67,6 +70,7 @@ class Crepe extends FlxSprite
 	{
 		if (!attacking && stun <= 0){
 			FlxG.overlap(this, PlayState.enemies, takeDamage);
+			FlxG.overlap(this, PlayState.bullets, bulletDamage);
 		}
 		if (stun >= 0){
 			stun--;
@@ -83,7 +87,6 @@ class Crepe extends FlxSprite
 		survival();
 		animPick();
 		HUD.hpSet(hp/hpMax);
-		HUD.survSet(surv/survMax);
 		super.update(elapsed);
 	}
 	
@@ -146,6 +149,9 @@ class Crepe extends FlxSprite
 	}
 	
 	function survival(){
+		if (!SURVIVE){
+			return;
+		}
 		surv -= 2;
 		if (surv <= 0){
 			hp--;
@@ -157,6 +163,7 @@ class Crepe extends FlxSprite
 		if (surv > survMax){
 			surv = survMax;
 		}
+		HUD.survSet(surv/survMax);
 	}
 	
 	function pickuphandler(p:Crepe, n:Pickup){
@@ -233,6 +240,29 @@ class Crepe extends FlxSprite
 		if (getMidpoint().y > e.getMidpoint().y){
 			velocity.y = kb;
 		}
+		loseHealth(e.str);
+	}
+	
+	function bulletDamage(p:FlxSprite, e:Bullet){
+		if (stun > 0){
+			return;
+		}
+		stun = Math.round(stunSet*.5);
+		animation.play("h"+animation.name.substr(1));
+		var kb:Float = speed;
+		if (getMidpoint().x < e.getMidpoint().x){
+			velocity.x = -kb;
+		}
+		if (getMidpoint().x > e.getMidpoint().x){
+			velocity.x = kb;
+		}
+		if (getMidpoint().y < e.getMidpoint().y){
+			velocity.y = -kb;
+		}
+		if (getMidpoint().y > e.getMidpoint().y){
+			velocity.y = kb;
+		}
+		e.kill();
 		loseHealth(e.str);
 	}
 	

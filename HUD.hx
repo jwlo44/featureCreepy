@@ -1,8 +1,10 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.addons.text.FlxTextField;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 
@@ -17,6 +19,9 @@ class HUD extends FlxSprite
 	static var hp:FlxSprite;
 	static var survEmpty:FlxSprite;
 	static var surv:FlxSprite;
+	static var bottom:FlxSprite;
+	static var bText:FlxText;
+	
 	public static var arrowX:Int = 0;
 	public static var arrowY:Int = 16;
 	var ddr:DDR;
@@ -30,7 +35,7 @@ class HUD extends FlxSprite
 		ddr = new DDR();
 		
 		visible = false;
-			
+		
 		block = new FlxSprite();
 		block.makeGraphic(FlxG.width, 16, FlxColor.BLACK);
 		block.scrollFactor.set(0, 0);
@@ -46,10 +51,22 @@ class HUD extends FlxSprite
 		survEmpty = new FlxSprite(hpEmpty.width + 5, 2);
 		survEmpty.loadGraphic(AssetPaths.survivalbar__png);
 		survEmpty.scrollFactor.set(0, 0);
+		survEmpty.visible = false;
 		
 		surv = new FlxSprite(0, 3);
 		surv.makeGraphic(48, 6, 0xFFFF9900);
 		surv.scrollFactor.set(0, 0);
+		surv.visible = false;
+		
+		bottom = new FlxSprite(0, 144 - 16);
+		bottom.makeGraphic(FlxG.width, 16, FlxColor.BLACK);
+		bottom.scrollFactor.set(0, 0);
+		bottom.visible = false;
+		
+		bText = new FlxText(bottom.x, bottom.y);
+		bText.text = "He's just standing there, menacingly!";
+		bText.scrollFactor.set(0, 0);
+		bText.visible = false;
 		
 		arrows = new FlxTypedGroup<FlxSprite>();
 		var i:Int = 0;
@@ -69,8 +86,13 @@ class HUD extends FlxSprite
 		PlayState.hud.add(hpEmpty);
 		PlayState.hud.add(surv);
 		PlayState.hud.add(survEmpty);
+		PlayState.hud.add(bottom);
+		PlayState.hud.add(bText);
+		
 		for (a in arrows)
-		{PlayState.hud.add(a); }
+		{
+			PlayState.hud.add(a); 
+		}
 	}
 	
 	public static function hpSet(set:Float){
@@ -93,10 +115,32 @@ class HUD extends FlxSprite
 		}
 	}
 	
+	static var bTick:Int = 0;
+	
+	public static function showText(s:String){
+		bottom.visible = true;
+		bText.visible = true;
+		bText.text = s;
+		bTick = 160;
+	}
+	
 	override public function update(elapsed:Float):Void 
 	{
 		ddr.update(elapsed);
+		bTick--;
+		if (bTick < 0){
+			bText.visible = false;
+			bottom.visible = false;
+		}
 		super.update(elapsed);
+	}
+	
+	public static function show(s:String){
+		switch(s){
+			case "surv":
+				surv.visible = true;
+				survEmpty.visible = true;
+		}
 	}
 	
 }

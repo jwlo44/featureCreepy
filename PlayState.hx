@@ -1,10 +1,12 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
+import flixel.addons.effects.chainable.FlxGlitchEffect.FlxGlitchDirection;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
@@ -29,8 +31,14 @@ class PlayState extends FlxState
 	
 	var lvlname:String = "test";
 	
+	public static var ustate:String = "";
+	
+	public var feature:FlxSprite;
+	
 	override public function create():Void
 	{	
+		ustate = "";
+		
 		bgColor = 0xFF7E9E35;
 		
 		crepeStuff = new FlxTypedGroup<FlxSprite>();
@@ -53,6 +61,13 @@ class PlayState extends FlxState
 		FlxG.camera.follow(crepe, FlxCameraFollowStyle.TOPDOWN_TIGHT);
 		FlxG.worldBounds.set(0, 0, lvl.width, lvl.height); //set world bounds to the size of the level so collisions work
 		FlxG.camera.setScrollBounds(0, lvl.width, 0, lvl.height);
+			
+		feature = new FlxSprite(-192, -108);
+		feature.scrollFactor.set(0, 0);
+		feature.loadGraphic(AssetPaths.newfeature__png, true, 640, 360);
+		feature.animation.add("stuff", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 23], 18, false);
+		feature.scale.set(0.4, 0.4);
+		feature.visible = false;
 		
 		add(lvl);
 		add(walls);
@@ -63,6 +78,7 @@ class PlayState extends FlxState
 		add(emitters);
 		add(bullets);
 		add(hud);
+		add(feature);
 		
 		add(new HUD());
 		
@@ -74,6 +90,7 @@ class PlayState extends FlxState
 		Ctrl.update();
 		FlxG.collide(crepe, walls);
 		FlxG.collide(enemies, walls);
+		upgrade();
 		super.update(elapsed);
 	}
 	
@@ -84,7 +101,6 @@ class PlayState extends FlxState
 			var tx:Int = Math.round((n.x) / 16);
 			var ty:Int = Math.round((n.y) / 16);
 			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
-				trace("s");
 				addNom(1);
 				n.destroy();
 			}
@@ -99,7 +115,41 @@ class PlayState extends FlxState
 			case "player":
 				crepe = new Crepe(x, y);
 			case "mushroom":
-				var m:Gun = new Gun(x, y);
+				var m:Mushroom = new Mushroom(x, y);
+			case "gun":
+				var g:Gun = new Gun(x, y);
+			case "glitch":
+				var g:Glitch = new Glitch(x, y);
+		}
+	}
+	
+	function upgrade(){
+		switch(ustate){
+			case "ustart":
+				feature.animation.play("stuff");
+				feature.visible = true;
+				ustate = "uwait";
+			case "uwait":
+				if (feature.animation.finished){
+					ustate = "utext";
+					feature.visible = false;
+					camera.flash();
+				}
+			case "utext":
+				HUD.showText("New Feature: You can just stand there, menacingly.");
+				newFeature();
+				ustate = "";
+		}
+	}
+	
+	var fcount:Int = 0;
+	
+	function newFeature(){
+		fcount++;
+		switch(fcount){
+			case 1:
+				HUD.show("surv");
+				crepe.SURVIVE = true;
 		}
 	}
 }
