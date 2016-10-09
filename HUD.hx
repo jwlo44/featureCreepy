@@ -73,10 +73,12 @@ class HUD extends FlxSprite
 		ammo = new FlxSprite(survEmpty.width*2 + 6, 3);
 		ammo.loadGraphic(AssetPaths.ammocount__png);
 		ammo.scrollFactor.set(0, 0);
+		ammo.visible = false;
 		
 		aText = new FlxText(ammo.x + ammo.width + 2, -1);
 		aText.text = "x5";
 		aText.scrollFactor.set(0, 0);
+		aText.visible = false;
 		
 		PlayState.hud.add(block);
 		PlayState.hud.add(hp);
@@ -145,7 +147,7 @@ class HUD extends FlxSprite
 			case "surv":
 				surv.visible = true;
 				survEmpty.visible = true;
-			case "arrows":
+			case "dance":
 				arrows = new FlxTypedGroup<FlxSprite>();
 				var i:Int = 0;
 				while ( i < 4)
@@ -163,6 +165,9 @@ class HUD extends FlxSprite
 					PlayState.hud.add(a);
 				}
 				ddr = new DDR();
+			case "gun":
+				ammo.visible = true;
+				aText.visible = true;
 			case "stats":
 				stats = new RpgStats();	
 		}

@@ -213,12 +213,12 @@ class Crepe extends FlxSprite
 		if (!PlayState.SURVIVE){
 			return;
 		}
-		surv -= 2;
+		surv -= 1;
 		if (surv <= 0){
 			hp--;
 		}
 		if (hp <= 0){
-			kill();
+			loseHealth(5);
 		}
 		if (surv > survMax){
 			surv = survMax;
@@ -284,7 +284,7 @@ class Crepe extends FlxSprite
 	}
 	
 	function takeDamage(p:FlxSprite, e:Enemy){
-		if (stun > 0){
+		if (stun > 0||e.name=="mushroom"&&PlayState.SWORD||e.name=="gun"&&PlayState.BULLETS){
 			return;
 		}
 		stun = stunSet;

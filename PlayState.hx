@@ -35,11 +35,11 @@ class PlayState extends FlxState
 	
 	public var feature:FlxSprite;
 	
-	public static var MOVE:Bool = true;
-	public static var SURVIVE:Bool = true;
-	public static var SWORD:Bool = true;
-	public static var BULLETS:Bool = true;
-	public static var STATS:Bool = true;
+	public static var MOVE:Bool = false;
+	public static var SURVIVE:Bool = false;
+	public static var SWORD:Bool = false;
+	public static var BULLETS:Bool = false;
+	public static var STATS:Bool = false;
 	public static var WALRUS:Bool = false;
 	public static var DANCE:Bool = false;
 	
@@ -90,7 +90,9 @@ class PlayState extends FlxState
 		add(feature);
 		
 		add(new HUD());
-		HUD.show("stats");
+		
+		dclear = true;
+		
 		super.create();
 	}
 
@@ -100,6 +102,7 @@ class PlayState extends FlxState
 		FlxG.collide(crepe, walls);
 		FlxG.collide(enemies, walls);
 		upgrade();
+		dlg();
 		super.update(elapsed);
 	}
 	
@@ -154,6 +157,8 @@ class PlayState extends FlxState
 			case "utext":
 				newFeature();
 				ustate = "";
+				dclear = true;
+				dtick = 1;
 		}
 	}
 	
@@ -173,7 +178,7 @@ class PlayState extends FlxState
 				HUD.showText("New Feature: Swing your sword with Z");
 				SWORD = true;
 			case 4:
-				HUD.showText("New Feature: Avoid the bullets!");
+				HUD.showText("New Feature: Avoid the bullets! Press X to shoot.");
 				BULLETS = true;
 			case 5:
 				HUD.showText("New Feature: Track your stats!");
@@ -184,7 +189,7 @@ class PlayState extends FlxState
 				WALRUS = true;
 			case 7:
 				HUD.showText("New Feature: Dance Dance Dance!");
-				HUD.show("arrows");
+				HUD.show("dance");
 				DANCE = true;
 		}
 		//var g:Glitch = new Glitch();
@@ -212,6 +217,55 @@ class PlayState extends FlxState
 		if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
 			addEnemy(name);
 			n.kill();
+		}
+	}
+	
+	var dtick:Int = -1;
+	var dphase:Int = 0;
+	static var dclear:Bool = false;
+	public function dlg(){
+		if(dclear){
+			dtick++;
+		}
+		if (dtick % 180 == 0){
+			dphase++;
+			var t:String = "";
+			switch(dphase){
+				case 1: t = "Okay so we got a character, right?";
+				case 2: t = "Yea, uh, what do they do? Move? Uh. Okay.";
+				case 3: t = "glitch";
+				case 4: t = "1";
+				case 5: t = "2";
+				case 6: t = "glitch";
+				case 7: t = "1";
+				case 8: t = "2";
+				case 9: t = "glitch";
+				case 10: t = "1";
+				case 11: t = "2";
+				case 12: t = "glitch";
+				case 13: t = "1";
+				case 14: t = "2";
+				case 15: t = "glitch";
+				case 16: t = "1";
+				case 17: t = "2";
+				case 18: t = "glitch";
+				case 19: t = "1";
+				case 20: t = "2";
+				case 21: t = "glitch";
+				case 22: t = "1";
+				case 23: t = "2";
+				case 24: t = "glitch";
+				case 25: t = "1";
+				case 26: t = "2";
+				case 28: t = "glitch";
+			}
+			if (t == "glitch"){
+				dtick = 1;
+				var g:Glitch = new Glitch(0, 0);
+				dclear = false;
+			}else{
+				HUD.showText(t);
+			}
 		}
 	}
 }

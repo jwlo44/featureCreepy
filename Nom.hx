@@ -17,6 +17,15 @@ class Nom extends Pickup
 		name = "nom";
 		loadGraphic(AssetPaths.nom__png);
 		PlayState.pickups.add(this);
+		visible = false;
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		if (PlayState.SURVIVE){
+			visible = true;
+		}
+		super.update(elapsed);
 	}
 	
 	override function kill(){

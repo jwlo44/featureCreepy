@@ -143,6 +143,7 @@ class DDR extends FlxSprite
 		}	
 		textTime = textTimeMax;
 		textSpr.visible = true;
+		textSpr.scrollFactor.set(0, 0);
 	}
 	
 }

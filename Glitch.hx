@@ -14,7 +14,7 @@ class Glitch extends FlxSprite
 {
 	var target:FlxSprite;
 	var tracking:Bool = false;
-	var speed:Int = 60;
+	var speed:Int = 80;
 	
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
