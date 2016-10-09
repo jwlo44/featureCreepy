@@ -22,10 +22,15 @@ class Mushroom extends Enemy
 		animation.add("hit", [3]);
 		setFacingFlip(FlxObject.RIGHT, true, false);
 		setFacingFlip(FlxObject.LEFT, false, false);
+		visible = false;
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (!PlayState.SWORD){
+			return;
+		}
+		visible = true;
 		stun--;
 		tick--;
 		if (stun > 0){

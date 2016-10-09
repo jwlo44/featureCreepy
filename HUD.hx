@@ -24,15 +24,13 @@ class HUD extends FlxSprite
 	
 	public static var arrowX:Int = 0;
 	public static var arrowY:Int = 16;
-	var ddr:DDR;
+	static var ddr:DDR;
 	
 	static var arrows:FlxTypedGroup<FlxSprite>;
 	
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
 		super(X, Y);
-		
-		ddr = new DDR();
 		
 		visible = false;
 		
@@ -68,18 +66,7 @@ class HUD extends FlxSprite
 		bText.scrollFactor.set(0, 0);
 		bText.visible = false;
 		
-		arrows = new FlxTypedGroup<FlxSprite>();
-		var i:Int = 0;
-		while ( i < 4)
-	    {
-			var spr:FlxSprite = new FlxSprite(arrowX + i*16, arrowY);
-			spr.loadGraphic(AssetPaths.DDRArrows__png, true, 16, 16);
-			spr.scrollFactor.set(0, 0);
-			spr.animation.add("arrow " + i, [4 + i], 1);
-			spr.animation.play("arrow " + i);
-			arrows.add(spr);
-			i++;
-		}
+		
 		
 		PlayState.hud.add(block);
 		PlayState.hud.add(hp);
@@ -89,10 +76,7 @@ class HUD extends FlxSprite
 		PlayState.hud.add(bottom);
 		PlayState.hud.add(bText);
 		
-		for (a in arrows)
-		{
-			PlayState.hud.add(a); 
-		}
+		
 	}
 	
 	public static function hpSet(set:Float){
@@ -126,7 +110,9 @@ class HUD extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{
-		ddr.update(elapsed);
+		if(PlayState.DANCE && ddr!=null){
+			ddr.update(elapsed);
+		}
 		bTick--;
 		if (bTick < 0){
 			bText.visible = false;
@@ -140,6 +126,24 @@ class HUD extends FlxSprite
 			case "surv":
 				surv.visible = true;
 				survEmpty.visible = true;
+			case "arrows":
+				arrows = new FlxTypedGroup<FlxSprite>();
+				var i:Int = 0;
+				while ( i < 4)
+				{
+					var spr:FlxSprite = new FlxSprite(arrowX + i*16, arrowY);
+					spr.loadGraphic(AssetPaths.DDRArrows__png, true, 16, 16);
+					spr.scrollFactor.set(0, 0);
+					spr.animation.add("arrow " + i, [4 + i], 1);
+					spr.animation.play("arrow " + i);
+					arrows.add(spr);
+					i++;
+				}
+				for (a in arrows)
+				{
+					PlayState.hud.add(a);
+				}
+				ddr = new DDR();
 		}
 	}
 	
