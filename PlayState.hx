@@ -29,6 +29,8 @@ class PlayState extends FlxState
 	public static var lvl:FlxTilemap;
 	public static var walls:FlxTilemap;
 	
+	var russ:FlxSprite;
+	
 	var lvlname:String = "test";
 	
 	public static var ustate:String = "";
@@ -40,7 +42,8 @@ class PlayState extends FlxState
 	public static var SWORD:Bool = true;
 	public static var BULLETS:Bool = true;
 	public static var STATS:Bool = true;
-	public static var WALRUS:Bool = false;
+	public static var WALRUS:Bool = true;
+	public static var walrusTime = false;
 	public static var DANCE:Bool = false;
 	
 	override public function create():Void
@@ -97,7 +100,25 @@ class PlayState extends FlxState
 		Ctrl.update();
 		FlxG.collide(crepe, walls);
 		FlxG.collide(enemies, walls);
+		if (walrusTime)
+		{FlxG.collide(crepe, russ);}
+
 		upgrade();
+		if (WALRUS && Date.now().getHours() <= 12 && !walrusTime)
+		{
+			russ = new FlxSprite(160, 160);
+			russ.loadGraphic(AssetPaths.russWiggle__png, true, 40, 32);
+			russ.animation.add("wiggle", [0, 1], 2);
+			russ.animation.play("wiggle");
+			russ.immovable = true;
+			misc.add(russ);
+			walrusTime = true;
+		}
+		if (walrusTime && Date.now().getHours() >= 12)
+		{
+			walrusTime = false;
+			russ.kill();
+		}
 		super.update(elapsed);
 	}
 	
@@ -173,7 +194,7 @@ class PlayState extends FlxState
 				HUD.show("stats");
 				STATS = true;
 			case 6:
-				HUD.showText("New Feature: Find the walrus between 6 AM - 12 PM");
+				HUD.showText("New Feature: Find the walrus between 12 AM - 12 PM");
 				WALRUS = true;
 			case 7:
 				HUD.showText("New Feature: Dance Dance Dance!");
