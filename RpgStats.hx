@@ -44,7 +44,7 @@ class RpgStats extends FlxSprite
 	private function updateText()
 	{
 		text.text = 
-		"Strengrth: " + strengrth 
+		"Strength: " + strengrth 
 		+ "\nSquanch: " + squanch
 		+ "\nWalrus: " + walrus
 		+ "\nZ: " + Z
