@@ -22,7 +22,7 @@ class MenuState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		Ctrl.update();
-	if (Ctrl.anyKey() )
+	if (Ctrl.anyJustPressed )
 	{
 		// go to play state
 		FlxG.switchState(new PlayState());

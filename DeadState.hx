@@ -23,7 +23,7 @@ class DeadState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		Ctrl.update();
-		if (Ctrl.anyKey())
+		if (Ctrl.anyJustPressed)
 		{
 			// go to menu state
 			FlxG.switchState(new MenuState());

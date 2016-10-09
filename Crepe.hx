@@ -241,7 +241,7 @@ class Crepe extends FlxSprite
 		Utils.explode(getMidpoint().x, getMidpoint().y, 10, FlxColor.RED);
 		hp -= damage;
 		if (hp <= 0){
-			kill();
+			FlxG.switchState(new DeadState());
 		}
 		HUD.hpSet(hp/hpMax);
 	}
