@@ -37,7 +37,7 @@ class RpgStats extends FlxSprite
 		{
 			Z++;
 		}
-		walrus = PlayState.WALRUS;
+		walrus = PlayState.walrusTime;
 		updateText();
 		super.update(elapsed);
 	}
