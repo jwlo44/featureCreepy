@@ -19,10 +19,11 @@ class Gun extends Enemy
 		super(X, Y);
 		hp = 2;
 		speed = 60;
+		name = "gun";
 		drag.x = drag.y = 400; //inertia
 		loadGraphic(AssetPaths.gun__png, true, 16, 20);
 		animation.add("walk", [0, 0, 1, 2, 3, 3, 2, 1], 12, true);
-		animation.add("shoot", [4, 4, 4, 5, 4, 4, 4, 4, 4, 4], 20, false);
+		animation.add("shoot", [4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4], 20, false);
 		animation.add("hit", [0]);
 		setFacingFlip(FlxObject.RIGHT, true, false);
 		setFacingFlip(FlxObject.LEFT, false, false);
@@ -41,7 +42,7 @@ class Gun extends Enemy
 			super.update(elapsed);
 			return;
 		}
-		if (Utils.distance(getMidpoint(), PlayState.crepe.getMidpoint())<detectDist){ //looking for crpee, if it finds it then it's permanently chasing them
+		if (isOnScreen()){ //looking for crepe, if it finds it then it's permanently chasing them
 			tracking = true;
 			target = PlayState.crepe;
 		}

@@ -35,10 +35,10 @@ class PlayState extends FlxState
 	
 	public var feature:FlxSprite;
 	
-	public static var MOVE:Bool = false;
-	public static var SURVIVE:Bool = false;
-	public static var SWORD:Bool = false;
-	public static var BULLETS:Bool = false;
+	public static var MOVE:Bool = true;
+	public static var SURVIVE:Bool = true;
+	public static var SWORD:Bool = true;
+	public static var BULLETS:Bool = true;
 	public static var STATS:Bool = false;
 	public static var WALRUS:Bool = false;
 	public static var DANCE:Bool = false;
@@ -88,6 +88,8 @@ class PlayState extends FlxState
 		add(hud);
 		add(feature);
 		
+		addNom(10);
+		
 		add(new HUD());
 		
 		super.create();
@@ -104,11 +106,12 @@ class PlayState extends FlxState
 	
 	public static function addNom(c:Int){
 		for (i in 0...c){
-			var n:Nom = new Nom(Math.round(Math.random() * 16) * 16, Math.round(Math.random() * 9) * 16);
+			var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
 			pickups.add(n);
-			var tx:Int = Math.round((n.x) / 16);
-			var ty:Int = Math.round((n.y) / 16);
+			var tx:Int = Math.round((n.x) / 8);
+			var ty:Int = Math.round((n.y) / 8);
 			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
+				trace("destroy");
 				addNom(1);
 				n.destroy();
 			}
@@ -179,6 +182,22 @@ class PlayState extends FlxState
 				HUD.show("arrows");
 				DANCE = true;
 		}
-		var g:Glitch = new Glitch();
+		//var g:Glitch = new Glitch();
+	}
+	
+	public static function addEnemy(name:String){
+		var n:Enemy = new Enemy();
+		var x:Float = Math.round(Math.random() * (lvl.width/16)) * 16;
+		var y:Float = Math.round(Math.random() * (lvl.height/16)) * 16;
+		switch(name){
+			case "mushroom": n = new Mushroom(x, y);
+			case "gun": n = new Gun(x, y);
+		}
+		var tx:Int = Math.round((n.x) / 8);
+		var ty:Int = Math.round((n.y) / 8);
+		if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
+			addNom(1);
+			n.destroy();
+		}
 	}
 }

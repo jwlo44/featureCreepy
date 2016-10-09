@@ -15,6 +15,7 @@ class Mushroom extends Enemy
 	{
 		super(X, Y);
 		hp = 3;
+		name = "mushroom";
 		drag.x = drag.y = 400; //inertia
 		loadGraphic(AssetPaths.mushroom__png, true, 18, 20);
 		animation.add("idle", [0]);
@@ -37,7 +38,7 @@ class Mushroom extends Enemy
 			super.update(elapsed);
 			return;
 		}
-		if (Utils.distance(getMidpoint(), PlayState.crepe.getMidpoint())<detectDist){ //looking for crpee, if it finds it then it's permanently chasing them
+		if (isOnScreen()){ //looking for crpee, if it finds it then it's permanently chasing them
 			tracking = true;
 			target = PlayState.crepe;
 		}

@@ -21,6 +21,8 @@ class Enemy extends FlxSprite //generic class for enemy
 	var tracking:Bool = false;
 	var target:FlxSprite;
 	var stun:Int = 0;
+	
+	var name:String = "enemy";
 
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
@@ -51,6 +53,7 @@ class Enemy extends FlxSprite //generic class for enemy
 		hp -= str;
 		if (hp <= 0){
 			kill();
+			PlayState.addEnemy(name);
 			makePickup();
 		}
 	}

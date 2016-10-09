@@ -80,6 +80,7 @@ class Crepe extends FlxSprite
 			alpha = 1;
 		}
 		attack();
+		fireGun();
 		move();
 		survival();
 		animPick();
@@ -89,6 +90,47 @@ class Crepe extends FlxSprite
 	}
 	
 	function attack(){
+		if (!PlayState.SWORD){
+			return;
+		}
+		attackTime--;
+		if (Ctrl.attack && attackTime <= 0){
+			trace("attack");
+			knife.visible = true;
+			velocity.x = velocity.y = 0;
+			attackTime = attackRate;
+			PlayState.crepeStuff.remove(this); PlayState.crepeStuff.remove(knife);
+			switch(animation.name.substr(1)){
+				case "up": knife.x = x + 10; knife.y = y - 6; animate("aup"); knife.angle = 0;
+				PlayState.crepeStuff.add(knife); PlayState.crepeStuff.add(this);
+				case "down": knife.x = x + 9; knife.y = y + 15; animate("adown"); knife.angle = 180;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
+				case "left": knife.x = x - 8; knife.y = y + 6; animate("aleft"); knife.angle = 270;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
+				case "right": knife.x = x + 20; knife.y = y + 7; animate("aright"); knife.angle = 90;
+				PlayState.crepeStuff.add(this); PlayState.crepeStuff.add(knife);
+			}
+		}
+		if (attackTime > 10){
+			attacking = true;
+		}
+		if (attackTime <= 10 && attacking){
+			attacking = false;
+			knife.visible = false;
+			switch(animation.name.substr(1)){
+				case "up": animate("iup");
+				case "down": animate("idown");
+				case "left": animate("ileft");
+				case "right": animate("iright");
+			}
+		}
+		if (attacking){
+			FlxG.overlap(knife, PlayState.enemies, damageEnemy);
+			FlxG.overlap(this, PlayState.enemies, damageEnemy);
+		}
+	}
+	
+	function fireGun(){
 		if (!PlayState.SWORD){
 			return;
 		}

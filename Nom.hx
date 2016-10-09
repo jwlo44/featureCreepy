@@ -1,7 +1,9 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -25,9 +27,10 @@ class Nom extends Pickup
 		if (!PlayState.SURVIVE){
 			return;
 		}
+		visible = true;
 		super.update(elapsed);
 	}
-	
+		
 	override function kill(){
 		PlayState.addNom(1);
 		super.kill();

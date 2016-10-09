@@ -51,18 +51,15 @@ class Ctrl
 		altcontrol();
 		if (anyKeyPressed() && anyJustPressed)
 		{
-			trace("not so just pressed");
 			anyHeld = true;
 			anyJustPressed = false;
 		}
 		else if (anyKeyPressed() && !anyHeld)
 		{
-			trace("just pressed");
 			anyJustPressed = true;
 		}
 		else if (!anyKeyPressed())
 		{
-			trace("none pressed");
 			anyJustPressed = false;
 			anyHeld = false;
 		}
