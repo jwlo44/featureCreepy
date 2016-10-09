@@ -28,6 +28,9 @@ class Ctrl
 	public static var pause:Bool = false;
 	public static var map:Bool = false;
 	
+	public static var anyJustPressed:Bool = false;
+	public static var anyHeld:Bool = false;
+
 	public function new() 
 	{
 	}
@@ -46,7 +49,32 @@ class Ctrl
 		pause = FlxG.keys.anyJustPressed(["P"]);
 		map = FlxG.keys.anyJustPressed(["SPACE"]);
 		altcontrol();
+		if (anyKeyPressed() && anyJustPressed)
+		{
+			trace("not so just pressed");
+			anyHeld = true;
+			anyJustPressed = false;
+		}
+		else if (anyKeyPressed() && !anyHeld)
+		{
+			trace("just pressed");
+			anyJustPressed = true;
+		}
+		else if (!anyKeyPressed())
+		{
+			trace("none pressed");
+			anyJustPressed = false;
+			anyHeld = false;
+		}
+	
 	}
+	
+	
+	public static function anyKeyPressed():Bool
+	{
+	return attack || special || jattack || jspecial || rattack || rspecial || up || down || left || right || pause || map;
+	}
+	
 	
 	public static function altcontrol() {
 		var gp:FlxGamepad = FlxG.gamepads.lastActive;

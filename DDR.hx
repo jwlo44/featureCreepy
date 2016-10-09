@@ -71,8 +71,6 @@ class DDR extends FlxSprite
 		arrows.add(arrow);
 		
 		PlayState.hud.add(arrow);
-		
-		trace("made arrow at " + arrow.x + ", " + arrow.y);
 		arrowIdx = (arrowIdx + 1) % 4;
 	}
 	
@@ -83,10 +81,8 @@ class DDR extends FlxSprite
 			// if we're in range for awesomeness...
 			if (arrow.y <= HUD.arrowY + goodRange && arrow.y >= HUD.arrowY - goodRange)
 			{
-				trace("arrow in range");
 				// 0 up,1 left, 2 down, 3 right
 				var arrowDir:Int = Math.floor((arrow.x - HUD.arrowX) / 16);
-				trace("arrowDir " + arrowDir);
 				var awesomeness:Bool = false;
 				// and we're also hitting the right button...
 				switch( arrowDir)
