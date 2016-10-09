@@ -77,7 +77,9 @@ class PlayState extends FlxState
 		feature.scale.set(0.4, 0.4);
 		feature.visible = false;
 		
-		addNom(3);
+		addNom();
+		addNom();
+		addNom();
 		
 		add(lvl);
 		add(walls);
@@ -122,18 +124,23 @@ class PlayState extends FlxState
 		super.update(elapsed);
 	}
 	
-	public static function addNom(c:Int){
-		for (i in 0...c){
-			trace("new nom");
-			var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
-			pickups.add(n);
-			var tx:Int = Math.round((n.x) / 8);
-			var ty:Int = Math.round((n.y) / 8);
-			if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
-				trace("nom kill");
-				addNom(1);
-				n.kill();
+	public static function addNom(c:Int=1){
+		var ncount:Int = 0;
+		for (i in pickups){
+			if (i.name=="nom"){
+				ncount++;
 			}
+		}
+		if (ncount > 3){
+			return;
+		}
+		var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
+		pickups.add(n);
+		var tx:Int = Math.round((n.x) / 8);
+		var ty:Int = Math.round((n.y) / 8);
+		if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
+			addNom(1);
+			n.kill();
 		}
 	}
 	
@@ -205,9 +212,18 @@ class PlayState extends FlxState
 	}
 	
 	public static function addEnemy(name:String){
+		var c:Int = 0;
+		for (i in enemies){
+			if (i.name == name){
+				c++;
+			}
+		}
+		if (c > 3){
+			return;
+		}
 		var n:Enemy = new Enemy(0,0);
-		var x:Float = Math.round(Math.random() * (lvl.width/16)) * 16;
-		var y:Float = Math.round(Math.random() * (lvl.height/16)) * 16;
+		var x:Float = Math.round(Math.random() * (lvl.width/8)) * 16;
+		var y:Float = Math.round(Math.random() * (lvl.height/8)) * 16;
 		switch(name){
 			case "mushroom": n = new Mushroom(x, y);
 			case "gun": n = new Gun(x, y);

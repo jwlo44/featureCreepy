@@ -41,4 +41,10 @@ class Bullet extends FlxSprite
 		super.update(elapsed);
 	}
 	
+	override public function kill():Void 
+	{
+		PlayState.bullets.remove(this, true);
+		super.kill();
+	}
+	
 }

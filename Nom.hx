@@ -1,9 +1,7 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
-import flixel.system.FlxSound;
 
 /**
  * ...
@@ -19,20 +17,11 @@ class Nom extends Pickup
 		name = "nom";
 		loadGraphic(AssetPaths.nom__png);
 		PlayState.pickups.add(this);
-		visible = false;
 	}
 	
-	override public function update(elapsed:Float):Void 
-	{
-		if (!PlayState.SURVIVE){
-			return;
-		}
-		visible = true;
-		super.update(elapsed);
-	}
-		
 	override function kill(){
 		PlayState.addNom(1);
+		PlayState.pickups.remove(this, true);
 		super.kill();
 	}
 	
