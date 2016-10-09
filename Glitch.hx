@@ -46,6 +46,7 @@ class Glitch extends FlxSprite
 		if (FlxG.overlap(this, PlayState.crepe)){
 			PlayState.ustate = "ustart";
 			Utils.explode(x, y, 30, FlxColor.BLUE);
+			SoundPlayer.playsound("glitch");
 			kill();
 		}
 		super.update(elapsed);

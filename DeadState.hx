@@ -15,6 +15,8 @@ class DeadState extends FlxState
 	var wait:Int = 5;
 	override public function create():Void
 	{
+		SoundPlayer.stopMusic();
+		SoundPlayer.playsound("gameover");
 		prettyImage = new FlxSprite();
 		prettyImage.loadGraphic(AssetPaths.deadScreenAnimation__png, true, 256, 144);
 		prettyImage.animation.add("dead", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 7, true);
@@ -41,7 +43,7 @@ class DeadState extends FlxState
 		{
 			wait--;
 		}
-		else if (Ctrl.anyJustPressed)
+		else if (Ctrl.jattack)
 		{
 			// go to menu state
 			FlxG.switchState(new MenuState());

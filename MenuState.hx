@@ -28,6 +28,9 @@ class MenuState extends FlxState
 		blinkingText.x = FlxG.width / 2 - blinkingText.width / 2;
 		blinkingText.y = FlxG.height * 3 / 4;
 		add(blinkingText);
+		
+		SoundPlayer.music("title");
+		
 		super.create();
 	}
 	override public function update(elapsed:Float):Void

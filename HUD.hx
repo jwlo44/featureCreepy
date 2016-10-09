@@ -70,7 +70,7 @@ class HUD extends FlxSprite
 		bText.scrollFactor.set(0, 0);
 		bText.visible = false;
 		
-		ammo = new FlxSprite(survEmpty.width*2 + 6, 3);
+		ammo = new FlxSprite(survEmpty.width*2 + 8, 3);
 		ammo.loadGraphic(AssetPaths.ammocount__png);
 		ammo.scrollFactor.set(0, 0);
 		ammo.visible = false;

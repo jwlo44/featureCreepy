@@ -48,6 +48,17 @@ class PlayState extends FlxState
 	
 	override public function create():Void
 	{	
+		MOVE = false;
+		SURVIVE = false;
+		SWORD = false;
+		BULLETS = false;
+		STATS = false;
+		WALRUS = false;
+		DANCE = false;
+		walrusTime = false;
+		
+		FlxG.mouse.visible = false;
+		
 		ustate = "";
 		
 		bgColor = 0xFF7E9E35;
@@ -80,6 +91,8 @@ class PlayState extends FlxState
 		addNom();
 		addNom();
 		addNom();
+		addNom();
+		addNom();
 		
 		add(lvl);
 		add(walls);
@@ -96,6 +109,9 @@ class PlayState extends FlxState
 		
 		dclear = true;
 		
+		SoundPlayer.stopMusic();
+		SoundPlayer.music("music");
+		
 		super.create();
 	}
 
@@ -110,6 +126,7 @@ class PlayState extends FlxState
 		upgrade();
 		dlg();
 		checkWalrus();
+		generateEnemies();
 		super.update(elapsed);
 	}
 	
@@ -139,7 +156,7 @@ class PlayState extends FlxState
 				ncount++;
 			}
 		}
-		if (ncount > 3){
+		if (ncount > 5){
 			return;
 		}
 		var n:Nom = new Nom(Math.round(Math.random() * (lvl.width/16)) * 16, Math.round(Math.random() * (lvl.height/16)) * 16);
@@ -165,6 +182,22 @@ class PlayState extends FlxState
 				var g:Gun = new Gun(x, y);
 			case "glitch":
 				var g:Glitch = new Glitch(x, y);
+		}
+	}
+	
+	var etick:Int = 0;
+	
+	function generateEnemies(){
+		if(SWORD){
+			etick++;
+		}
+		if (etick % 480 == 0){
+			if (SWORD){
+				addEnemy("mushroom");
+			}
+			if (BULLETS){
+				addEnemy("gun");
+			}
 		}
 	}
 	
@@ -205,13 +238,14 @@ class PlayState extends FlxState
 				SWORD = true;
 			case 4:
 				HUD.showText("New Feature: Avoid the bullets! Press X to shoot.");
+				HUD.show("gun");
 				BULLETS = true;
 			case 5:
 				HUD.showText("New Feature: Track your stats!");
 				HUD.show("stats");
 				STATS = true;
 			case 6:
-				HUD.showText("New Feature: Find the walrus between 12 AM - 12 PM");
+				HUD.showText("New Feature: See the walrus between 12 AM - 12 PM");
 				WALRUS = true;
 			case 7:
 				HUD.showText("New Feature: Dance Dance Dance!");
@@ -221,14 +255,8 @@ class PlayState extends FlxState
 		//var g:Glitch = new Glitch();
 	}
 	
-	public static function addEnemy(name:String){
-		var c:Int = 0;
-		for (i in enemies){
-			if (i.name == name){
-				c++;
-			}
-		}
-		if (c > 3){
+	public static function addEnemy(name:String, ov:Int=0){
+		if (ov>5){
 			return;
 		}
 		var n:Enemy = new Enemy(0,0);
@@ -241,7 +269,7 @@ class PlayState extends FlxState
 		var tx:Int = Math.round((n.x) / 8);
 		var ty:Int = Math.round((n.y) / 8);
 		if (walls.getTile(tx, ty) == 1 || n.x+n.width > lvl.width || n.y+n.height > lvl.height || n.x < 0 || n.y < 0){
-			addEnemy(name);
+			addEnemy(name,ov+1);
 			n.kill();
 		}
 	}
@@ -257,37 +285,48 @@ class PlayState extends FlxState
 			dphase++;
 			var t:String = "";
 			switch(dphase){
-				case 1: t = "Okay so we got a character, right?";
-				case 2: t = "Yea, uh, what do they do? Move? Uh. Okay.";
+				case 1: t = "Game's looking pretty good, did you add that tree?";
+				case 2: t = "Hella! And check out what else I added!";
 				case 3: t = "glitch";
-				case 4: t = "1";
-				case 5: t = "2";
+				case 4: t = "Ah, you figured out how to make them move!";
+				case 5: t = "We should make it, like, a survival game.";
 				case 6: t = "glitch";
-				case 7: t = "1";
-				case 8: t = "2";
-				case 9: t = "glitch";
-				case 10: t = "1";
-				case 11: t = "2";
+				case 7: t = "Yeah! I got you homefry, Already added it!";
+				case 8: t = "This game's so intense, top tier stuff";
+				case 9: t = "Yea, it's like, man vs nature or something.";
+				case 10: t = "Still kinda lame, can we, y’know, fight something?";
+				case 11: t = "Yea. Let's give them a sword.";
 				case 12: t = "glitch";
-				case 13: t = "1";
-				case 14: t = "2";
-				case 15: t = "glitch";
-				case 16: t = "1";
-				case 17: t = "2";
-				case 18: t = "glitch";
-				case 19: t = "1";
-				case 20: t = "2";
-				case 21: t = "glitch";
-				case 22: t = "1";
-				case 23: t = "2";
+				case 13: t = "Hey that's not bad!";
+				case 14: t = "I still think our game is lacking some sex appeal.";
+				case 15: t = "And guns... here, gimme the keyboard.";
+				case 16: t = "glitch";
+				case 17: t = "Hey, looking good!";
+				case 18: t = "But what’s keeping the player invested?";
+				case 19: t = "Stats! Julia, write that down!";
+				case 20: t = "glitch";
+				case 21: t = "We need to make it harder to get that schweet food.";
+				case 22: t = "Something to wall us in...";
+				case 23: t = "You said walrus, right?";
 				case 24: t = "glitch";
-				case 25: t = "1";
-				case 26: t = "2";
-				case 28: t = "glitch";
+				case 25: t = "Even with the walrus it’s still missing something...";
+				case 26: t = "Yo we need some sick tracks.";
+				case 27: t = "glitch";
+				case 28: t = "Yo this game's sick! GOTY 1987!";
+				case 29: t = "Yea this is the best.";
+				case 30: t = "Can't believe we made such a great game!";
+				case 31: t = "Yea! It's pure genius!";
+				case 32: t = "And the UI's so clear too!";
+				case 33: t = "Yea can't believe we fit it all in so well!";
+				case 34: t = "So you think it's ready to ship?";
+				case 35: t = "Yea definitely.";
+				case 36: t = "Uh, we need an ending though.";
+				case 37: t = "Nahhhhhhh let's just wait until they die";
+				case 38: t = "Works for me.";
 			}
 			if (t == "glitch"){
 				dtick = 1;
-				var g:Glitch = new Glitch(0, 0);
+				var g:Glitch = new Glitch(lvl.width/2, lvl.height);
 				dclear = false;
 			}else{
 				HUD.showText(t);

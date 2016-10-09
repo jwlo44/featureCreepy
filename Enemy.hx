@@ -112,6 +112,7 @@ class Enemy extends FlxSprite //generic class for enemy
 	override public function kill():Void 
 	{
 		PlayState.enemies.remove(this, true);
+		name = "";
 		super.kill();
 	}
 	

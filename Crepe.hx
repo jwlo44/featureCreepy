@@ -102,7 +102,7 @@ class Crepe extends FlxSprite
 		}
 		attackTime--;
 		if (Ctrl.attack && attackTime <= 0){
-			trace("attack");
+			SoundPlayer.playsound("sword");
 			knife.visible = true;
 			velocity.x = velocity.y = 0;
 			attackTime = attackRate;
@@ -145,6 +145,7 @@ class Crepe extends FlxSprite
 		}
 		attackTime--;
 		if (Ctrl.special && attackTime <= 0 && ammo > 0){
+			SoundPlayer.playsound("fire");
 			ammo--;
 			gun.visible = true;
 			velocity.x = velocity.y = 0;
@@ -213,7 +214,7 @@ class Crepe extends FlxSprite
 		if (!PlayState.SURVIVE){
 			return;
 		}
-		surv -= 1;
+		surv -= 2;
 		if (surv <= 0){
 			hp--;
 		}
@@ -229,14 +230,17 @@ class Crepe extends FlxSprite
 	function pickuphandler(p:Crepe, n:Pickup){
 		switch(n.name){
 			case "nom": 
-				surv += cast(n,Nom).nomval;
+				surv += cast(n, Nom).nomval;
+				SoundPlayer.playsound("food");
 			case "heart":
 				hp += 60 * 2;
 				if (hp > hpMax){
 					hp = hpMax;
 				}
+				SoundPlayer.playsound("heart");
 			case "ammo":
 				ammo += 2;
+				SoundPlayer.playsound("ammo");
 		}
 		n.kill();
 		
@@ -284,9 +288,10 @@ class Crepe extends FlxSprite
 	}
 	
 	function takeDamage(p:FlxSprite, e:Enemy){
-		if (stun > 0||e.name=="mushroom"&&PlayState.SWORD||e.name=="gun"&&PlayState.BULLETS){
+		if (stun > 0||e.name=="mushroom"&&!PlayState.SWORD||e.name=="gun"&&!PlayState.BULLETS){
 			return;
 		}
+		SoundPlayer.playsound("hit");
 		stun = stunSet;
 		animation.play("h"+animation.name.substr(1));
 		var kb:Float = speed;
