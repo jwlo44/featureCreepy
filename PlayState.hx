@@ -35,6 +35,14 @@ class PlayState extends FlxState
 	
 	public var feature:FlxSprite;
 	
+	public static var MOVE:Bool = false;
+	public static var SURVIVE:Bool = false;
+	public static var SWORD:Bool = false;
+	public static var BULLETS:Bool = false;
+	public static var STATS:Bool = false;
+	public static var WALRUS:Bool = false;
+	public static var DANCE:Bool = false;
+	
 	override public function create():Void
 	{	
 		ustate = "";
@@ -136,7 +144,6 @@ class PlayState extends FlxState
 					camera.flash();
 				}
 			case "utext":
-				HUD.showText("New Feature: You can just stand there, menacingly.");
 				newFeature();
 				ustate = "";
 		}
@@ -148,8 +155,30 @@ class PlayState extends FlxState
 		fcount++;
 		switch(fcount){
 			case 1:
+				HUD.showText("New Feature: Move around with arrow keys");
+				MOVE = true;
+			case 2:
+				HUD.showText("New Feature: Collect food to survive");
 				HUD.show("surv");
-				crepe.SURVIVE = true;
+				SURVIVE = true;
+			case 3:
+				HUD.showText("New Feature: Swing your sword with Z");
+				SWORD = true;
+			case 4:
+				HUD.showText("New Feature: Avoid the bullets!");
+				BULLETS = true;
+			case 5:
+				HUD.showText("New Feature: Track your stats!");
+				HUD.show("stats");
+				STATS = true;
+			case 6:
+				HUD.showText("New Feature: Find the walrus between 6 AM - 12 PM");
+				WALRUS = true;
+			case 7:
+				HUD.showText("New Feature: Dance Dance Dance!");
+				HUD.show("arrows");
+				DANCE = true;
 		}
+		var g:Glitch = new Glitch();
 	}
 }

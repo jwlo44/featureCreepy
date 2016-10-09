@@ -26,10 +26,15 @@ class Gun extends Enemy
 		animation.add("hit", [0]);
 		setFacingFlip(FlxObject.RIGHT, true, false);
 		setFacingFlip(FlxObject.LEFT, false, false);
+		visible = false;
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (!PlayState.BULLETS){
+			return;
+		}
+		visible = true;
 		stun--;
 		tick--;
 		if (stun > 0){

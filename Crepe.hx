@@ -25,9 +25,6 @@ class Crepe extends FlxSprite
 	
 	var knife:FlxSprite;
 	
-	public var SURVIVE:Bool = false;
-	public var SWORD:Bool = false;
-	
 	public function new(?X:Float = 0, ?Y:Float = 0) 
 	{
 		super(X, Y);
@@ -63,7 +60,7 @@ class Crepe extends FlxSprite
 		knife.loadGraphic(AssetPaths.Knife__png);
 		knife.antialiasing = false;
 		PlayState.crepeStuff.add(this);
-		PlayState.crepeStuff.add(this);
+		PlayState.crepeStuff.add(knife);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -86,11 +83,15 @@ class Crepe extends FlxSprite
 		move();
 		survival();
 		animPick();
+		FlxG.overlap(this, PlayState.pickups, pickuphandler);
 		HUD.hpSet(hp/hpMax);
 		super.update(elapsed);
 	}
 	
 	function attack(){
+		if (!PlayState.SWORD){
+			return;
+		}
 		attackTime--;
 		if (Ctrl.attack && attackTime <= 0){
 			trace("attack");
@@ -129,6 +130,9 @@ class Crepe extends FlxSprite
 	}
 	
 	function move(){
+		if (!PlayState.MOVE){
+			return;
+		}
 		if (attacking){
 			return;
 		}
@@ -149,7 +153,7 @@ class Crepe extends FlxSprite
 	}
 	
 	function survival(){
-		if (!SURVIVE){
+		if (!PlayState.SURVIVE){
 			return;
 		}
 		surv -= 2;
@@ -159,7 +163,6 @@ class Crepe extends FlxSprite
 		if (hp <= 0){
 			kill();
 		}
-		FlxG.overlap(this, PlayState.pickups, pickuphandler);
 		if (surv > survMax){
 			surv = survMax;
 		}
