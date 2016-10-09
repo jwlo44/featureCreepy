@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
+import flixel.util.FlxColor;
 
 class DeadState extends FlxState
 {
@@ -15,6 +16,7 @@ class DeadState extends FlxState
 	var wait:Int = 5;
 	override public function create():Void
 	{
+		camera.fade(FlxColor.BLACK, 3, true);
 		SoundPlayer.stopMusic();
 		SoundPlayer.playsound("gameover");
 		prettyImage = new FlxSprite();

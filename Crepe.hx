@@ -28,6 +28,7 @@ class Crepe extends FlxSprite
 	var gun:FlxSprite;
 	
 	var ammo:Int = 5;
+	var isDead:Bool = false;
 	
 	public function new(?X:Float = 0, ?Y:Float = 0) 
 	{
@@ -55,11 +56,14 @@ class Crepe extends FlxSprite
 		animation.add("hright", [17], fps);
 		animation.add("hleft", [18], fps);
 		
+		// die
+		animation.add("die", [19], fps);
+		
 		animation.play("idown");
 		
 		hp = hpMax;
 		surv = survMax;
-		
+		isDead = false;
 		knife = new FlxSprite();
 		knife.loadGraphic(AssetPaths.Knife__png);
 		
@@ -97,7 +101,7 @@ class Crepe extends FlxSprite
 	}
 		
 	function attack(){
-		if (!PlayState.SWORD){
+		if (!PlayState.SWORD || isDead){
 			return;
 		}
 		attackTime--;
@@ -140,7 +144,7 @@ class Crepe extends FlxSprite
 	}
 	
 	function fireGun(){
-		if (!PlayState.BULLETS){
+		if (!PlayState.BULLETS || isDead){
 			return;
 		}
 		attackTime--;
@@ -188,14 +192,14 @@ class Crepe extends FlxSprite
 	}
 	
 	function move(){
-		if (!PlayState.MOVE){
+		velocity.x = 0;
+		velocity.y = 0;
+		if (!PlayState.MOVE || isDead){
 			return;
 		}
 		if (attacking){
 			return;
 		}
-		velocity.x = 0;
-		velocity.y = 0;
 		if (Ctrl.right){
 			velocity.x = speed;
 		}
@@ -218,8 +222,8 @@ class Crepe extends FlxSprite
 		if (surv <= 0){
 			hp--;
 		}
-		if (hp <= 0){
-			loseHealth(5);
+		if (hp <= 0 && !isDead){
+			kill();
 		}
 		if (surv > survMax){
 			surv = survMax;
@@ -247,7 +251,7 @@ class Crepe extends FlxSprite
 	}
 	
 	function animPick(){
-		if (attacking){
+		if (attacking || isDead){
 			return;
 		}
 		var walkpick:Bool = false;
@@ -337,10 +341,22 @@ class Crepe extends FlxSprite
 	{
 		Utils.explode(getMidpoint().x, getMidpoint().y, 10, FlxColor.RED);
 		hp -= damage;
-		if (hp <= 0){
-			FlxG.switchState(new DeadState());
+		if (hp <= 0 && !isDead){
+			kill();
 		}
 		HUD.hpSet(hp/hpMax);
+	}
+	
+	override public function kill():Void 
+	{
+		isDead = true;
+		animation.play("die");
+		FlxG.camera.fade(FlxColor.BLACK, 3, false, switchState);
+	}
+	
+	function switchState()
+	{
+		FlxG.switchState(new DeadState());
 	}
 	
 }
